@@ -1,0 +1,107 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div>
+  {% if user.is_authenticated %}
+
+  <div class = row>
+     <div class="col-md-12">
+    <div class="content section" style="text-align: center;">
+        <h3>OPTIONS</h3>
+          <ul class="list-group" style="text-align: center;">
+            <li class="list-group-item list-group-item-light"><a href = "{% url 'transaction' %}"class="mybutton">TRANSACTION HISTORY</a></li>
+            <li class="list-group-item list-group-item-light"><a href = "{% url 'mycharts' %}" class="mybutton" >CONSUMPTION DATA</a></li>
+            <li class="list-group-item list-group-item-light">BALANCE :<p id="balance">NULL</p></li>
+            <li class="list-group-item list-group-item-light"><strong>STATUS</strong><p id="status"></p></li>
+            <li class="list-group-item list-group-item-light" id="on">
+                <button onclick="toggler('on','Jkuat-grid/house1/status/change');" type="button" class="btn btn-success" >TURN ON</button>
+            </li>
+             <li class="list-group-item list-group-item-light" id="off">
+                <button onclick="toggler('off','Jkuat-grid/house1/status/change');"type="button" class="btn btn-danger">TURN OFF</button>
+            </li>
+
+                    <script>
+                        //the mqtt broker address and port number. we use port number 8081 to publish from the websocket
+                        //which in this case is encrypted on the mosquitto broker. on hivemq broker, websocket port is 8000
+
+                        function onMessageArrived(message)
+                         {
+                            console.log("onMessageArrived:"+message.payloadString);
+                            console.log(message.destinationName);
+                            // m = typeof message.destinationName;
+                            // console.log(m);
+                            // when a message arrives, it will be checked to see what street it matches then the respective action taken
+                            //the includes method checks if the portion of string in brackets is included in the main string and returns either true or false
+                            topiccheck1 = message.destinationName.includes("Jkuat-grid/house1/status/now");
+                            topiccheck2 = message.destinationName.includes("Jkuat-grid/house1/balance");
+                            if (topiccheck1)
+                            {
+                                document.getElementById("status").innerHTML=message.payloadString;
+                            }
+                            if (topiccheck2)
+                            {
+                                document.getElementById("balance").innerHTML=message.payloadString;
+                            }
+                           }
+                        function toggler(changer,sendToTopic)
+                        {
+                        // try to find the requested page and alert if it's not found
+                        if (!changer) {
+                            alert("no such element");
+                            return;
+                        }
+
+                        message = new Paho.MQTT.Message(changer);
+                        message.destinationName = sendToTopic;
+                        mqtt.send(message);
+                        console.log(message);
+
+
+                        }
+                            function MQTTconnect()
+                        {
+                        mqtt = new Paho.MQTT.Client("test.mosquitto.org", Number(8081), "sonoff-example-client");
+                        mqtt.connect({onSuccess: function() {
+                            console.log("connected!");
+                            document.getElementById("status").innerHTML="DASHBOARD CONNECTED";
+                            mqtt.subscribe("Jkuat-grid/house1/status/now");
+                            mqtt.subscribe("Jkuat-grid/house1/balance");},
+                            onFailure: onFailure,
+
+
+                            });
+
+
+
+                            mqtt.onConnectionLost = onConnectionLost;
+                            mqtt.onMessageArrived = onMessageArrived;
+
+                            mqtt.connect();
+                            return false;
+
+
+                            }
+                        function onConnectionLost()
+                            {
+                            console.log("connection lost");
+                            connected_flag=0;
+                            MQTTconnect();
+                            }
+                        function onFailure(message)
+                        {
+                            console.log("Failed");
+                            document.getElementById("status").innerHTML="DASHBOARD NOT CONNECTED";
+                            setTimeout(MQTTconnect(), 1000);
+                        }
+                         MQTTconnect();
+                        </script>
+          </ul>
+    </div>
+   </div>
+  </div>
+  {% else %}
+  <p>please Log In first!!</p>
+  <button class="btn btn-sm btn-danger"><a class="nav-link" href="{% url 'login' %} ">LOG IN</a></button>
+  {% endif %}
+</div>
+
+{% endblock content %}

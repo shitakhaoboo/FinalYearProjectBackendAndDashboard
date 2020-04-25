@@ -1,0 +1,115 @@
+{% extends 'store/base.html' %}
+
+<script>
+{% block jquery %}
+var endpoint = '../api/chart_data/'
+var defaultData = []
+var labels = []
+var pageList = new Array()
+var pageList1 = new Array()
+var currentPage = 1
+var numberPerPage = 10
+var numberOfPages = 1;
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+        labels = data.labels;
+        defaultData = data.default;
+        numberOfPages = Math.ceil(labels.length / numberPerPage);
+        loadList(labels,defaultData);
+        chart_adjust(pageList,pageList1);
+    },
+    error: function(error_data){
+        console.log("error")
+        console.log(error_data)
+    }
+})
+function nextPage() {
+    currentPage += 1;
+    loadList(labels,defaultData);
+    chart_adjust(pageList,pageList1);
+}
+function previousPage() {
+    currentPage -= 1;
+    loadList(labels,defaultData);
+    chart_adjust(pageList,pageList1);
+}
+function firstPage() {
+    currentPage = 1;
+    loadList(labels,defaultData);
+    chart_adjust(pageList,pageList1);
+}
+function lastPage() {
+    currentPage = numberOfPages;
+    loadList(labels,defaultData);
+    chart_adjust(pageList,pageList1);
+}
+function loadList(li,lo) {
+    var begin = ((currentPage - 1) * numberPerPage);
+    var end = begin + numberPerPage;
+
+    pageList = li.slice(begin, end);
+    pageList1 = lo.slice(begin, end);
+    check();         // determines the states of the pagination buttons
+}
+function check() {
+
+    document.getElementById("next").disabled = currentPage == numberOfPages ? true : false;
+    document.getElementById("previous").disabled = currentPage == 1 ? true : false;
+    document.getElementById("first").disabled = currentPage == 1 ? true : false;
+    document.getElementById("last").disabled = currentPage == numberOfPages ? true : false;
+}
+function chart_adjust(labels_in,data_in)
+{
+        $("canvas#myChart").remove();
+        $("div.myChart").append('<canvas id="myChart" class="animated fadeIn" width="400" height="400" ></canvas>');
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels_in,
+            datasets: [{
+                label: "consumption",
+                data: data_in,
+                backgroundColor:"rgba(2,25,237,0.4)"
+                <!--backgroundColor: [-->
+                <!--'rgba(255, 99, 132, 0.2)',-->
+                <!--'rgba(54, 162, 235, 0.2)',-->
+                <!--'rgba(255, 206, 86, 0.2)',-->
+                <!--'rgba(75, 192, 192, 0.2)',-->
+                <!--'rgba(153, 102, 255, 0.2)',-->
+                <!--'rgba(255, 159, 64, 0.2)'-->
+            <!--],-->
+            <!--borderColor: [-->
+                <!--'rgba(255, 99, 132, 1)',-->
+                <!--'rgba(54, 162, 235, 1)',-->
+                <!--'rgba(255, 206, 86, 1)',-->
+                <!--'rgba(75, 192, 192, 1)',-->
+                <!--'rgba(153, 102, 255, 1)',-->
+                <!--'rgba(255, 159, 64, 1)'-->
+            <!--],-->
+            }]
+               }
+            })
+}
+
+{% endblock %}
+</script>
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-sm-12' url-endpoint='{% url "chart_api" %}'>
+        <div class='myChart col-sm-12'>
+            <canvas id="myChart" width="400" height="400"  ></canvas>
+        </div>
+
+    </div>
+</div>
+<input type="button" id="first" onclick="firstPage()" value="first" />
+<input type="button" id="next" onclick="nextPage()" value="next" />
+<input type="button" id="previous" onclick="previousPage()" value="previous" />
+<input type="button" id="last" onclick="lastPage()" value="last" />
+
+{% endblock content %}

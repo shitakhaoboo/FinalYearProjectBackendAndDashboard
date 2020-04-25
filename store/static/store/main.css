@@ -1,0 +1,37 @@
+body
+ {
+     background: #fafafa;
+     color: #333333;
+     margin-top: 5rem;
+ }
+ h1,h2,h3,h4,h5,h6
+ {
+     color: #444444;
+ }
+ ul
+ {
+     margin: 0;
+ }
+
+ .bg-steel
+ {
+     background-color: #5f788a;
+ }
+ .site-header .navbar .nav-link
+ {
+     color: #cbd5db;
+ }
+ .mybutton
+        {
+            margin: 15px 0 0;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 900;
+            color: #333;
+            padding: 5px;
+        }
+        .mybutton:hover
+        {
+            background-color: #012;
+            color: #FFF;
+        }

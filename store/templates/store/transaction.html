@@ -1,0 +1,40 @@
+{% extends 'store/base.html' %}
+{% load render_table from django_tables2 %}
+
+
+{% block content %}
+<div url-endpoint='{% url "transaction_api" %}'>
+        <div>
+             <script>
+{% block jquery %}
+var endpoint = '../api/transaction_data/'
+var defaultData
+var labels
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+        labels = data.labels
+        defaultData = data.default
+        document.getElementById("meterno").innerHTML = labels;
+        document.getElementById("accountno").innerHTML = defaultData;
+       },
+    error: function(error_data){
+        console.log("error")
+        console.log(error_data)
+    }
+})
+{% endblock %}
+</script>
+        </div>
+     <label for="meterno" style="text"><strong>Meter Number:</strong></label>
+     <p id="meterno"></p>
+     <label for="accountno"><strong>Account Number:</strong></label>
+     <p id="accountno"></p>
+
+    </div>
+<div class='row'>
+     {% render_table table %}
+</div>
+
+{% endblock content %}
