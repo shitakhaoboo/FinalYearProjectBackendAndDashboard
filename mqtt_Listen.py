@@ -43,7 +43,7 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     #from the meter, we get consumption data
-    if msg.topic == "Jkuat-grid/house1/consumption":
+    if msg.topic == "Jkuat-grid/house1/consumed":
         # my_data = json.loads(msg.payload)
         print(msg.payload)
         a = 1
@@ -84,6 +84,7 @@ def on_message(client, userdata, msg):
         dbobj = DatabaseManager(dbFile1)
         dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time) VALUES (?,?,?,?,?)", [a,b,c,d,e])
         del dbobj
+        client.publish("Jkuat-grid/house1/load_data",c)
         # data_fetch(c, a)
         #write code to update the meter
 
