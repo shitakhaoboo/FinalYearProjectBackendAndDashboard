@@ -26,6 +26,7 @@ SECRET_KEY = 'mol6g%g7dtj3x&zp!udsz^tnn@0o^_1**w2_6cj=6n^1-ro@5_'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['raspberrypi']
 
 
 # Application definition

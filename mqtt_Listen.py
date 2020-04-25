@@ -2,7 +2,7 @@ from time import gmtime, strftime
 import paho.mqtt.client as mqtt
 import sqlite3
 import json
-import datetime
+from datetime import datetime
 # import os
 # # django project name is adleads, replace adleads with your project name
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pharmacy.settings")
@@ -48,7 +48,7 @@ def on_message(client, userdata, msg):
         print(msg.payload)
         a = 1
         #KPLC format YYYY/MM/DD
-        b = datetime.date.today()
+        b = datetime.now()
         # safaricom format DD/MM/YY
         f=b.strftime("%d/%m/%y")
         c = float(msg.payload)
@@ -76,8 +76,8 @@ def on_message(client, userdata, msg):
         b = float(step_2)
         #passing amount through tarrif to generate token
         c= b*0.1
-        d = datetime.date.today().strftime("%d/%m/%y")
-        e = step_1[14]
+        d = datetime.now().strftime("%d/%m/%y")
+        e = datetime.now().strftime("%H:%M:%S")
         print(b)
         # saver = load_meter(meter=a,ksh=b,units=c)
         # saver.save()
@@ -92,38 +92,38 @@ def on_message(client, userdata, msg):
 
     return
 
-#function to update the balance table
-def data_fetch(adjustment,mtr):
-    try:
-        sqliteConnection = sqlite3.connect(dbFile1)
-        cursor = sqliteConnection.cursor()
-        print("Connected to SQLite")
-        #to select current balance
-        sqlite_select_query = """SELECT balance from store_meter WHERE id = 1 """
-        cursor.execute(sqlite_select_query)
-        records = cursor.fetchall()
-        records1 = str(records).strip("[],()")
-        #to add purcgased tokens
-        adjustment +=float(records1)
-        print(adjustment)
-        cursor.close()
-        #to save purchased tokens
-
-        sqliteConnection = sqlite3.connect(dbFile1)
-        cursor = sqliteConnection.cursor()
-        sql_update_query = """Update store_meter set balance = ? where id =?"""
-        data= (adjustment,mtr)
-        cursor.execute(sql_update_query, data)
-        sqliteConnection.commit()
-        cursor.close()
-
-
-    except sqlite3.Error as error:
-        print("Failed to read data from sqlite table", error)
-    finally:
-        if (sqliteConnection):
-            sqliteConnection.close()
-            print("The SQLite connection is closed")
+# #function to update the balance table
+# def data_fetch(adjustment,mtr):
+#     try:
+#         sqliteConnection = sqlite3.connect(dbFile1)
+#         cursor = sqliteConnection.cursor()
+#         print("Connected to SQLite")
+#         #to select current balance
+#         sqlite_select_query = """SELECT balance from store_meter WHERE id = 1 """
+#         cursor.execute(sqlite_select_query)
+#         records = cursor.fetchall()
+#         records1 = str(records).strip("[],()")
+#         #to add purcgased tokens
+#         adjustment +=float(records1)
+#         print(adjustment)
+#         cursor.close()
+#         #to save purchased tokens
+#
+#         sqliteConnection = sqlite3.connect(dbFile1)
+#         cursor = sqliteConnection.cursor()
+#         sql_update_query = """Update store_meter set balance = ? where id =?"""
+#         data= (adjustment,mtr)
+#         cursor.execute(sql_update_query, data)
+#         sqliteConnection.commit()
+#         cursor.close()
+#
+#
+#     except sqlite3.Error as error:
+#         print("Failed to read data from sqlite table", error)
+#     finally:
+#         if (sqliteConnection):
+#             sqliteConnection.close()
+#             print("The SQLite connection is closed")
 
 
 client = mqtt.Client()
