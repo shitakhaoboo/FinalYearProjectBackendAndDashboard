@@ -11,6 +11,7 @@
             <li class="list-group-item list-group-item-light"><a href = "{% url 'transaction' %}"class="mybutton">TRANSACTION HISTORY</a></li>
             <li class="list-group-item list-group-item-light"><a href = "{% url 'mycharts' %}" class="mybutton" >CONSUMPTION DATA</a></li>
             <li class="list-group-item list-group-item-light">BALANCE :<p id="balance">NULL</p></li>
+            <li class="list-group-item list-group-item-light">RELAY STATUS :<p id="meter_status">NULL</p></li>
             <li class="list-group-item list-group-item-light"><strong>STATUS</strong><p id="status"></p></li>
             <li class="list-group-item list-group-item-light" id="on">
                 <button onclick="toggler('on','Jkuat-grid/house1/status/change');" type="button" class="btn btn-success" >TURN ON</button>
@@ -35,7 +36,7 @@
                             topiccheck2 = message.destinationName.includes("Jkuat-grid/house1/balance");
                             if (topiccheck1)
                             {
-                                document.getElementById("status").innerHTML=message.payloadString;
+                                document.getElementById("meter_status").innerHTML=message.payloadString;
                             }
                             if (topiccheck2)
                             {

@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_tables2 import SingleTableView
 from .transaction_table import TrasnactionTable
+from rest_framework import viewsets,permissions
+from .serializers import TransactionSerializer
 
 def index(request):
     # #to get the current logged_in user
@@ -91,3 +93,9 @@ class ConsumptionListView(SingleTableView):
     model = load_meter
     table_class = TrasnactionTable
     template_name = 'store/transaction.html'
+
+
+class TransactionView(viewsets.ModelViewSet):
+    serializer_class = TransactionSerializer
+    queryset = load_meter.objects.all()
+

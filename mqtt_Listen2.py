@@ -20,7 +20,7 @@ def on_connect1(client, userdata, flags, rc):
 def Clienter1(c):
     client1 = mqtt.Client()
     client1.on_connect = on_connect1
-    client1.connect("stimakonnekt", 1883)
+    client1.connect("test.mosquitto.org", 1883)
     client1.publish("Jkuat-grid/house1/load_data",c,qos=1)
     client1.disconnect()
 
@@ -73,30 +73,31 @@ def on_message(client, userdata, msg):
 
     if msg.topic == "Jkuat-grid/load_data":
         #from the mobile app, we get load data
-        print(msg.payload)
+        # print(msg.payload)
         #convert received message to string
         m1 = str(msg.payload)
         #divide the string using split method
-        step_1 = m1.split(" ")
-
-        a = int(step_1[10])
+        step_1 = m1.split("\\n")
+        a = int((step_1[1].split())[2])
+        print(step_1)
         #a is meter id, b is money, c is units,d is time
-        print(a)
+        # print(a)
         #to remain with the amount and convert it to float
-        step_2 = str(step_1[2]).lstrip("Ksh")
+        step_2 = str((step_1[5].split())[1]).lstrip("Ksh").strip("'")
         b = float(step_2)
+        # print(b)
         #passing amount through tarrif to generate token
         c= b*0.1
         d = datetime.now().strftime("%d/%m/%y")
         e = datetime.now().strftime("%H:%M:%S")
-        print(b)
-        # saver = load_meter(meter=a,ksh=b,units=c)
-        # saver.save()
+        print(a,b,c,d,e)
+        token = step_1[2].split()[1]
+        print(token)
         dbobj = DatabaseManager(dbFile1)
-        dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time) VALUES (?,?,?,?,?)", [a,b,c,d,e])
+        dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time,token) VALUES (?,?,?,?,?,?)", [a,b,c,d,e,token])
         del dbobj
-        client.publish("Jkuat-grid/house1/load_data",c)
-        Clienter1(str(msg.payload))
+        # client.publish("Jkuat-grid/house1/load_data",c)
+        # Clienter1(str(msg.payload))
         # data_fetch(c, a)
         #write code to update the meter
 

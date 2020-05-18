@@ -30,6 +30,7 @@ class load_meter(models.Model):
     meter = models.ForeignKey(Meter, on_delete=models.PROTECT)
     units = models.FloatField(default=0)
     day = models.CharField(max_length=20)
+    token = models.CharField(max_length=25, blank=True)
     time = models.TimeField(auto_now_add=True)
     ksh = models.FloatField(default=0)
 

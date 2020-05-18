@@ -5,4 +5,4 @@ class TrasnactionTable(tables.Table):
     class Meta:
         model = load_meter
         template_name = "django_tables2/bootstrap.html"
-        fields = ("ksh","units","day","time" )
+        fields = ("ksh","token","units","day","time" )
