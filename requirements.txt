@@ -4,7 +4,7 @@ automium-web==0.1.1
 Click==7.0
 colorama==0.4.1
 coverage==4.5.4
-Django==2.2.5
+Django==2.2.13
 django-chartjs==1.5.0
 django-crispy-forms==1.7.2
 django-email-users==1.1.0
