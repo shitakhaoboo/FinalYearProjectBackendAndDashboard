@@ -13,6 +13,17 @@ MQTT_Topic1 = "Jkuat-grid/#"
 dbFile = 'IoT1.db'
 dbFile1 = '/home/pi/pharmacy/db.sqlite3'
 
+def on_connect1(client, userdata, flags, rc):
+    print("Connected with result code " + str(rc) + " Sending to other broker")
+
+
+def Clienter1(c):
+    client1 = mqtt.Client()
+    client1.on_connect = on_connect1
+    client1.connect("stimakonnekt", 1883)
+    client1.publish("Jkuat-grid/house1/load_data",c,qos=1)
+    client1.disconnect()
+
 
 class DatabaseManager:
     def __init__(self, jina):
@@ -29,6 +40,7 @@ class DatabaseManager:
     def __del__(self):
         self.cur.close()
         self.conn.close()
+
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -60,19 +72,19 @@ def on_message(client, userdata, msg):
         del dbobj
         # data_fetch(-c,a)
 
-    if msg.topic == "Jkuat-grid/house1/load_data":
+    if msg.topic == "Jkuat-grid/load_data":
         #from the mobile app, we get load data
         print(msg.payload)
-        '''#convert received message to string
+        #convert received message to string
         m1 = str(msg.payload)
         #divide the string using split method
-        step_1 = m1.split(" ")
+        step_1 = m1.split("\\n")
 
-        a = int(step_1[10])
+        a = int((step_1[1].split())[2])
         #a is meter id, b is money, c is units,d is time
         print(a)
         #to remain with the amount and convert it to float
-        step_2 = str(step_1[2]).lstrip("Ksh")
+        step_2 = str((step_1[5].split())[1]).lstrip("Ksh").strip("'")
         b = float(step_2)
         #passing amount through tarrif to generate token
         c= b*0.1
@@ -81,61 +93,24 @@ def on_message(client, userdata, msg):
         print(b)
         # saver = load_meter(meter=a,ksh=b,units=c)
         # saver.save()
+        token = step_1[2].split()[1]
         dbobj = DatabaseManager(dbFile1)
-        dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time) VALUES (?,?,?,?,?)", [a,b,c,d,e])
+        dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time,token) VALUES (?,?,?,?,?,?)", [a,b,c,d,e,token])
         del dbobj
-        client.publish("Jkuat-grid/house1/load_data",c)
+        client.publish("Jkuat-grid/house1/load_data",token)
+        Clienter1(token)
         # data_fetch(c, a)
-        #write code to update the meter'''
+        #write code to update the meter
 
     if msg.topic == "Jkuat-grid/house1/status":
         print(msg.payload)
 
     return
 
-# #function to update the balance table
-# def data_fetch(adjustment,mtr):
-#     try:
-#         sqliteConnection = sqlite3.connect(dbFile1)
-#         cursor = sqliteConnection.cursor()
-#         print("Connected to SQLite")
-#         #to select current balance
-#         sqlite_select_query = """SELECT balance from store_meter WHERE id = 1 """
-#         cursor.execute(sqlite_select_query)
-#         records = cursor.fetchall()
-#         records1 = str(records).strip("[],()")
-#         #to add purcgased tokens
-#         adjustment +=float(records1)
-#         print(adjustment)
-#         cursor.close()
-#         #to save purchased tokens
-#
-#         sqliteConnection = sqlite3.connect(dbFile1)
-#         cursor = sqliteConnection.cursor()
-#         sql_update_query = """Update store_meter set balance = ? where id =?"""
-#         data= (adjustment,mtr)
-#         cursor.execute(sql_update_query, data)
-#         sqliteConnection.commit()
-#         cursor.close()
-#
-#
-#     except sqlite3.Error as error:
-#         print("Failed to read data from sqlite table", error)
-#     finally:
-#         if (sqliteConnection):
-#             sqliteConnection.close()
-#             print("The SQLite connection is closed")
 
 
 client = mqtt.Client()
-# client.username_pw_set(username="oboo", password="root100")
 client.on_connect = on_connect
 client.on_message = on_message
-
-client.connect("stimakonnekt", 1883)
-
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface.
+client.connect("test.mosquitto.org", 1883)
 client.loop_forever()
