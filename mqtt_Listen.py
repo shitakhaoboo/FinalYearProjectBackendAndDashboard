@@ -63,6 +63,7 @@ def on_message(client, userdata, msg):
     if msg.topic == "Jkuat-grid/house1/load_data":
         #from the mobile app, we get load data
         print(msg.payload)
+        #edited out because load data is only for the meter to get updated for client on local broker
         '''#convert received message to string
         m1 = str(msg.payload)
         #divide the string using split method
