@@ -60,73 +60,10 @@ def on_message(client, userdata, msg):
         del dbobj
         # data_fetch(-c,a)
 
-    if msg.topic == "Jkuat-grid/house1/load_data":
-        #from the mobile app, we get load data
-        print(msg.payload)
-        #edited out because load data is only for the meter to get updated for client on local broker
-        '''#convert received message to string
-        m1 = str(msg.payload)
-        #divide the string using split method
-        step_1 = m1.split(" ")
-
-        a = int(step_1[10])
-        #a is meter id, b is money, c is units,d is time
-        print(a)
-        #to remain with the amount and convert it to float
-        step_2 = str(step_1[2]).lstrip("Ksh")
-        b = float(step_2)
-        #passing amount through tarrif to generate token
-        c= b*0.1
-        d = datetime.now().strftime("%d/%m/%y")
-        e = datetime.now().strftime("%H:%M:%S")
-        print(b)
-        # saver = load_meter(meter=a,ksh=b,units=c)
-        # saver.save()
-        dbobj = DatabaseManager(dbFile1)
-        dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time) VALUES (?,?,?,?,?)", [a,b,c,d,e])
-        del dbobj
-        client.publish("Jkuat-grid/house1/load_data",c)
-        # data_fetch(c, a)
-        #write code to update the meter'''
-
     if msg.topic == "Jkuat-grid/house1/status":
         print(msg.payload)
 
     return
-
-# #function to update the balance table
-# def data_fetch(adjustment,mtr):
-#     try:
-#         sqliteConnection = sqlite3.connect(dbFile1)
-#         cursor = sqliteConnection.cursor()
-#         print("Connected to SQLite")
-#         #to select current balance
-#         sqlite_select_query = """SELECT balance from store_meter WHERE id = 1 """
-#         cursor.execute(sqlite_select_query)
-#         records = cursor.fetchall()
-#         records1 = str(records).strip("[],()")
-#         #to add purcgased tokens
-#         adjustment +=float(records1)
-#         print(adjustment)
-#         cursor.close()
-#         #to save purchased tokens
-#
-#         sqliteConnection = sqlite3.connect(dbFile1)
-#         cursor = sqliteConnection.cursor()
-#         sql_update_query = """Update store_meter set balance = ? where id =?"""
-#         data= (adjustment,mtr)
-#         cursor.execute(sql_update_query, data)
-#         sqliteConnection.commit()
-#         cursor.close()
-#
-#
-#     except sqlite3.Error as error:
-#         print("Failed to read data from sqlite table", error)
-#     finally:
-#         if (sqliteConnection):
-#             sqliteConnection.close()
-#             print("The SQLite connection is closed")
-
 
 client = mqtt.Client()
 # client.username_pw_set(username="oboo", password="root100")
