@@ -21,7 +21,7 @@ def Clienter1(c):
     client1 = mqtt.Client()
     client1.on_connect = on_connect1
     client1.connect("stimakonnekt", 1883)
-    client1.publish("Jkuat-grid/house1/load_data",c,qos=1)
+    client1.publish("Jkuat-grid/house1/load_data_meter",c,qos=1)
     client1.disconnect()
 
 
