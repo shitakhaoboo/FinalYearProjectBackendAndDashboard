@@ -98,8 +98,8 @@ def on_message(client, userdata, msg):
         dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time,token) VALUES (?,?,?,?,?,?)", [a,b,c,d,e,token])
         del dbobj
 #         in case meter is connected to online broker
-        client.publish("Jkuat-grid/house1/load_data_meter",c)
-        Clienter1(c)
+        client.publish("Jkuat-grid/house1/load_data_meter",token)
+        Clienter1(token)
         # data_fetch(c, a)
         #write code to update the meter
 
