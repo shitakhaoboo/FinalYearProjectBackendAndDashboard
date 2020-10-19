@@ -25,7 +25,7 @@ SECRET_KEY = 'mol6g%g7dtj3x&zp!udsz^tnn@0o^_1**w2_6cj=6n^1-ro@5_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['stimakonnekt']
+ALLOWED_HOSTS = ['stimakonnekt', '.ngrok.io']
 # ALLOWED_HOSTS = ['raspberrypi']
 
 
