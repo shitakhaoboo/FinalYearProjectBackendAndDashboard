@@ -21,7 +21,7 @@ def Clienter1(topic,c):
     client1 = mqtt.Client()
     client1.on_connect = on_connect1
     client1.connect("stimakonnekt", 1883)
-    client1.publish(topic,c,qos=1)
+    client1.publish(topic,c,qos=2)
     client1.disconnect()
 
 
@@ -72,7 +72,7 @@ def on_message(client, userdata, msg):
         del dbobj
         # data_fetch(-c,a)
 
-    if msg.topic == "Jkuat-grid/load_data":
+    elif msg.topic == "Jkuat-grid/load_data":
         #from the mobile app, we get load data
 #         print(msg.payload)
         #convert received message to string
@@ -106,15 +106,14 @@ def on_message(client, userdata, msg):
 #     if msg.topic == "Jkuat-grid/house1/status":
 #         print(msg.payload)
     
-    if msg.topic == "Jkuat-grid/house1/status/now":
-        Clienter1("Jkuat-grid/house1/status/now",str(msg.payload))
-        print(msg.payload)
-        
-    if msg.topic == "Jkuat-grid/house1/balance":
-        Clienter1("Jkuat-grid/house1/balance",str(msg.payload))
-        print(msg.payload)
+    elif msg.topic == "Jkuat-grid/house1/status/now":
+        Clienter1("Jkuat-grid/house1/status/now",str(msg.payload, 'utf-8'))
+    
+    elif msg.topic == "Jkuat-grid/house1/balance":
+        Clienter1("Jkuat-grid/house1/balance",str(msg.payload, 'utf-8'))
 
-    return
+    else:
+        return
 
 
 

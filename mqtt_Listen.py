@@ -60,10 +60,11 @@ def on_message(client, userdata, msg):
         del dbobj
         # data_fetch(-c,a)
 
-    if msg.topic == "Jkuat-grid/house1/status":
+    elif msg.topic == "Jkuat-grid/house1/status":
         print(msg.payload)
 
-    return
+    else:
+        return
 
 client = mqtt.Client()
 # client.username_pw_set(username="oboo", password="root100")
