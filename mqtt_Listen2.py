@@ -17,11 +17,11 @@ def on_connect1(client, userdata, flags, rc):
     print("Connected with result code " + str(rc) + " Sending to other broker")
 
 
-def Clienter1(c):
+def Clienter1(topic,c):
     client1 = mqtt.Client()
     client1.on_connect = on_connect1
     client1.connect("stimakonnekt", 1883)
-    client1.publish("Jkuat-grid/house1/load_data_meter",c,qos=1)
+    client1.publish(topic,c,qos=1)
     client1.disconnect()
 
 
@@ -74,7 +74,7 @@ def on_message(client, userdata, msg):
 
     if msg.topic == "Jkuat-grid/load_data":
         #from the mobile app, we get load data
-        print(msg.payload)
+#         print(msg.payload)
         #convert received message to string
         m1 = str(msg.payload)
         #divide the string using split method
@@ -99,12 +99,18 @@ def on_message(client, userdata, msg):
         del dbobj
 #         in case meter is connected to online broker
         client.publish("Jkuat-grid/house1/load_data_meter",token)
-        Clienter1(token)
+        Clienter1("Jkuat-grid/house1/load_data_meter",token)
         # data_fetch(c, a)
         #write code to update the meter
 
-    if msg.topic == "Jkuat-grid/house1/status":
-        print(msg.payload)
+#     if msg.topic == "Jkuat-grid/house1/status":
+#         print(msg.payload)
+    
+    if msg.topic == "Jkuat-grid/house1/status/now":
+        Clienter1("Jkuat-grid/house1/status/now",str(msg.payload))
+        
+    if msg.topic == "Jkuat-grid/house1/balance":
+        Clienter1("Jkuat-grid/house1/balance",str(msg.payload))
 
     return
 
