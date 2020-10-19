@@ -108,9 +108,11 @@ def on_message(client, userdata, msg):
     
     if msg.topic == "Jkuat-grid/house1/status/now":
         Clienter1("Jkuat-grid/house1/status/now",str(msg.payload))
+        print(msg.payload)
         
     if msg.topic == "Jkuat-grid/house1/balance":
         Clienter1("Jkuat-grid/house1/balance",str(msg.payload))
+        print(msg.payload)
 
     return
 
@@ -119,5 +121,5 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect("broker.hivemq.com", 1883)
+client.connect("3.tcp.ngrok.io", 24407)
 client.loop_forever()
