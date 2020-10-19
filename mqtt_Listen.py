@@ -13,12 +13,6 @@ MQTT_Topic1 = "Jkuat-grid/#"
 dbFile = 'IoT1.db'
 dbFile1 = '/home/pi/pharmacy/db.sqlite3'
 
-def Clienter1(topic,c):
-    client1 = mqtt.Client()
-    client1.on_connect = on_connect1
-    client1.connect("3.tcp.ngrok.io", 24407)
-    client1.publish(topic,c,qos=2)
-    client1.disconnect()
 
 class DatabaseManager:
     def __init__(self, jina):
@@ -66,8 +60,7 @@ def on_message(client, userdata, msg):
         del dbobj
         # data_fetch(-c,a)
 
-    elif msg.topic == "Jkuat-grid/house1/status/change":
-        Clienter1("Jkuat-grid/house1/status/change",str(msg.payload, 'utf-8'))
+    elif msg.topic == "Jkuat-grid/house1/status":
         print(msg.payload)
 
     else:
