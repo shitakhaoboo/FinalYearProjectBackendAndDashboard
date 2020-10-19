@@ -111,6 +111,9 @@ def on_message(client, userdata, msg):
     
     elif msg.topic == "Jkuat-grid/house1/balance":
         Clienter1("Jkuat-grid/house1/balance",str(msg.payload, 'utf-8'))
+        
+    elif msg.topic == "Jkuat-grid/house1/status/change":
+        Clienter1("Jkuat-grid/house1/status/change",str(msg.payload, 'utf-8'))
 
     else:
         return
