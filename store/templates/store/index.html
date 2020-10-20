@@ -53,6 +53,7 @@
 
                         message = new Paho.MQTT.Message(changer);
                         message.destinationName = sendToTopic;
+                        message.qos = 1;
                         mqtt.send(message);
                         console.log(message);
 
