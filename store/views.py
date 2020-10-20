@@ -95,6 +95,6 @@ class ConsumptionListView(SingleTableView):
     template_name = 'store/transaction.html'
     
     
- class TransactionView(viewsets.ModelViewSet):
+class TransactionView(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     queryset = load_meter.objects.all()
