@@ -59,6 +59,34 @@ def on_message(client, userdata, msg):
         #write function to update balance for the current user(manipulate database vs publish to token_balance topic
         del dbobj
         # data_fetch(-c,a)
+        
+    elif msg.topic == "Jkuat-grid/load_data":
+        #from the mobile app, we get load data
+#         print(msg.payload)
+        #convert received message to string
+        m1 = str(msg.payload)
+        #divide the string using split method
+        step_1 = m1.split("\\n")
+
+        a = int((step_1[1].split())[2])
+        #a is meter id, b is money, c is units,d is time
+        print(a)
+        #to remain with the amount and convert it to float
+        step_2 = str((step_1[5].split())[1]).lstrip("Ksh").strip("'")
+        b = float(step_2)
+        #passing amount through tarrif to generate token
+        c= b*0.1
+        d = datetime.now().strftime("%d/%m/%y")
+        e = datetime.now().strftime("%H:%M:%S")
+        print(b)
+        # saver = load_meter(meter=a,ksh=b,units=c)
+        # saver.save()
+        token = step_1[2].split()[1]
+        dbobj = DatabaseManager(dbFile1)
+        dbobj.add_del_update_db_record("INSERT INTO store_load_meter(meter_id,ksh,units,day,time,token) VALUES (?,?,?,?,?,?)", [a,b,c,d,e,token])
+        del dbobj
+#         in case meter is connected to online broker
+        client.publish("Jkuat-grid/house1/load_data_meter",token)
 
     elif msg.topic == "Jkuat-grid/house1/status":
         print(msg.payload)
