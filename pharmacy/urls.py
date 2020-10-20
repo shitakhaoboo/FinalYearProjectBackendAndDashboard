@@ -21,6 +21,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'Transactionhistory',userview.TransactionView,'Transactionhistory')
+router.register(r'Consumptionhistory',userview.ConsumptionView,'Consumptionhistory')
 
 urlpatterns = [
     path('',auth_views.LoginView.as_view(template_name='store/login.html'),name = 'login'),
