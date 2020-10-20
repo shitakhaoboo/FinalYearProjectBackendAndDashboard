@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from store import views as userview
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'Transactionhistory',userview.TransactionView,'Transactionhistory')
 
 urlpatterns = [
     path('',auth_views.LoginView.as_view(template_name='store/login.html'),name = 'login'),
@@ -27,5 +31,6 @@ urlpatterns = [
     path('chart/',userview.ChartView.as_view(),name='mycharts'),
     path('api/chart_data/', userview.chart_data.as_view(),name='chart_api'),
     path('transaction/', userview.ConsumptionListView.as_view(),name='transaction'),
-    path('api/transaction_data/',userview.momo.as_view(),name='transaction_api')
+    path('api/transaction_data/',userview.momo.as_view(),name='transaction_api'),
+    path('api/',include(router.urls)),
 ]
