@@ -32,8 +32,8 @@
                             // console.log(m);
                             // when a message arrives, it will be checked to see what street it matches then the respective action taken
                             //the includes method checks if the portion of string in brackets is included in the main string and returns either true or false
-                            topiccheck1 = message.destinationName.includes("Jkuat-grid/house1/status/now");
-                            topiccheck2 = message.destinationName.includes("Jkuat-grid/house1/balance");
+                            let topiccheck1 = message.destinationName.includes("Jkuat-grid/house1/status/now");
+                            let topiccheck2 = message.destinationName.includes("Jkuat-grid/house1/balance");
                             if (topiccheck1)
                             {
                                 document.getElementById("meter_status").innerHTML=message.payloadString;
@@ -51,7 +51,7 @@
                             return;
                         }
 
-                        message = new Paho.MQTT.Message(changer);
+                        let message = new Paho.MQTT.Message(changer);
                         message.destinationName = sendToTopic;
                         message.qos = 1;
                         mqtt.send(message);
@@ -61,7 +61,7 @@
                         }
                             function MQTTconnect()
                         {
-                        mqtt = new Paho.MQTT.Client("stimakonnekt", Number(1884), "sonoff-example-client");
+                        let mqtt = new Paho.MQTT.Client("stimakonnekt", Number(1884), "sonoff-example-client");
                         mqtt.connect({onSuccess: function() {
                             console.log("connected!");
                             document.getElementById("status").innerHTML="DASHBOARD CONNECTED";
