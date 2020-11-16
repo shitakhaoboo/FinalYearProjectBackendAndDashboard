@@ -61,7 +61,7 @@
                         }
                             function MQTTconnect()
                         {
-                        var mqtt = new Paho.MQTT.Client("stimakonnekt", Number(1884), "sonoff-example-client");
+                        var mqtt = new Paho.MQTT.Client("1.tcp.ngrok.io", Number(28337), "sonoff-example-client");
                         mqtt.connect({onSuccess: function() {
                             console.log("connected!");
                             document.getElementById("status").innerHTML="DASHBOARD CONNECTED";
