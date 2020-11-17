@@ -99,7 +99,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("stimakonnekt", 1883)
+client.connect("broker.hivemq.com", 1883)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
