@@ -50,7 +50,7 @@ def on_message(client, userdata, msg):
         #KPLC format YYYY/MM/DD
         b = datetime.now()
         # safaricom format DD/MM/YY
-        f=b.strftime("%d-%m-%y")
+        f=b.strftime("%y-%m-%d")
         c = float(msg.payload)
         print(a,b, c,f)
         print("Writing to db...")
