@@ -10,7 +10,7 @@ django-crispy-forms==1.7.2
 django-email-users==1.1.0
 django-nose==1.4.6
 django-tables2==2.2.1
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djangorestframework-stubs==1.0.0
 entrypoints==0.3
 flake8==3.7.9
